@@ -1,7 +1,14 @@
 import Foundation
 
 struct Cartfile {
-    typealias Slug = String
+    struct Slug: Hashable {
+        var organization: String
+        var repository: String
+        
+        var full: String {
+            return "\(organization)/\(repository)"
+        }
+    }
     
     struct Package: Hashable {
         enum Source: Hashable {
@@ -22,6 +29,16 @@ struct Cartfile {
     }
     
     var packages: Set<Package>
+}
+
+extension Cartfile.Slug {
+    init?(_ string: String) {
+        let components = string.split(separator: "/")
+        guard components.count == 2 else { return nil }
+        let organization = String(components.first!)
+        let repository = String(components.last!)
+        self.init(organization: organization, repository: repository)
+    }
 }
 
 class CartfileParser {
@@ -60,7 +77,7 @@ class CartfileParser {
         return Cartfile(packages: packages)
     }
     
-    func parseLine(_ declaration: String) throws -> Cartfile.Package {
+    private func parseLine(_ declaration: String) throws -> Cartfile.Package {
         let components = declaration.split(separator: " ")
         guard components.count == 3 else {
             throw Error.couldNotParse(reason: "Dependency declaration must be '<source> <location> <version>'.")
@@ -77,10 +94,10 @@ class CartfileParser {
             }
             source = .git(url)
         case "github":
-            guard location.split(separator: "/").count == 2 else {
+            guard let slug = Cartfile.Slug(location.unquoted()) else {
                 throw Error.couldNotParse(reason: "GitHub slug \(location) is invalid format")
             }
-            source = .github(location.unquoted())
+            source = .github(slug)
         default:
             throw Error.couldNotParse(reason: "Unknown source \(sourceString)")
         }
