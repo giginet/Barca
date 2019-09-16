@@ -23,10 +23,10 @@ let package = Package(
     targets: [
         .target(
             name: "BarcaKit",
-            dependencies: []),
+            dependencies: ["XcodeProj", "TOMLDecoder"]),
         .target(
             name: "Barca",
-            dependencies: ["BarcaKit"]),
+            dependencies: ["BarcaKit", "Commander"]),
         .testTarget(
             name: "BarcaKitTests",
             dependencies: ["BarcaKit"]),
