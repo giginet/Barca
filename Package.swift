@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Barca",
+    platforms: [.macOS(.v10_10)],
     products: [
         .library(
             name: "BarcaKit",
