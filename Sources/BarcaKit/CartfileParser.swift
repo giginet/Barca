@@ -21,7 +21,7 @@ struct Cartfile {
         var version: String
     }
     
-    var packages: [Package]
+    var packages: Set<Package>
 }
 
 class CartfileParser {
@@ -48,11 +48,15 @@ class CartfileParser {
         guard cartfileResolvedURL.isFileURL else {
             throw Error.localURL
         }
-        guard let rawString = try? String(contentsOf: cartfileResolvedURL, encoding: .utf8) else {
+        guard let content = try? String(contentsOf: cartfileResolvedURL, encoding: .utf8) else {
             throw Error.couldNotLoad(cartfileResolvedURL)
         }
-        let declarations = rawString.split(separator: "\n").map(String.init)
-        let packages = declarations.compactMap { try? parseLine($0) }
+        return try parse(content: content)
+    }
+    
+    func parse(content: String) throws -> Cartfile {
+        let declarations = content.split(separator: "\n").map(String.init)
+        let packages = Set(declarations.compactMap { try? parseLine($0) })
         return Cartfile(packages: packages)
     }
     
@@ -68,7 +72,7 @@ class CartfileParser {
         let source: Cartfile.Package.Source
         switch sourceString {
         case "git":
-            guard let url = URL(string: location) else {
+            guard let url = URL(string: location.unquoted()) else {
                 throw Error.couldNotParse(reason: "Location \(location) is invalid")
             }
             source = .git(url)
@@ -76,15 +80,21 @@ class CartfileParser {
             guard location.split(separator: "/").count == 2 else {
                 throw Error.couldNotParse(reason: "GitHub slug \(location) is invalid format")
             }
-            source = .github(location)
+            source = .github(location.unquoted())
         default:
             throw Error.couldNotParse(reason: "Unknown source \(sourceString)")
         }
-        guard version.isQuoted else {
-            throw Error.couldNotParse(reason: "Invalid version \(version)")
-        }
-        let trimmedVersion = String(version[version.index(after: version.startIndex)...version.index(before: version.endIndex)])
+        let trimmedVersion = version.unquoted()
         
         return Cartfile.Package(source: source, version: trimmedVersion)
+    }
+}
+
+extension String {
+    fileprivate func unquoted() -> String {
+        if isQuoted {
+            return String(self[index(after: startIndex)...index(endIndex, offsetBy: -2)])
+        }
+        return self
     }
 }
