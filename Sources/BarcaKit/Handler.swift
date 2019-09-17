@@ -26,6 +26,9 @@ public final class Handler {
                 .appendingPathComponent(package.name).path)
             return try? projectLoader.load(package.name, from: repositoryPath)
         }
-        print(packages)
+        let injector = Injector()
+        for package in packages {
+            injector.inject(.static, into: "Crossroad", of: package)
+        }
     }
 }
