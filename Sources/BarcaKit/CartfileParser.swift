@@ -26,6 +26,14 @@ struct Cartfile {
         }
         var source: Source
         var version: String
+        var name: String {
+            switch source {
+            case .git(let url):
+                return url.lastPathComponent
+            case .github(let slug):
+                return slug.repository
+            }
+        }
     }
     
     var packages: Set<Package>

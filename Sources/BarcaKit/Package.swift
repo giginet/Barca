@@ -1,18 +1,14 @@
 import Foundation
 import PathKit
+import XcodeProj
 
 struct Package {
-    var carthagePackage: Cartfile.Package
+    var repositoryPath: Path
+    var xcodeProj: XcodeProj
     var repositoryName: String {
-        switch carthagePackage.source {
-        case .github(let slug):
-            return slug.repository
-        case .git(let url):
-            return url.deletingPathExtension().lastPathComponent
-        }
+        return repositoryPath.components.last!
     }
-    var repositoryPath: Path {
-        return Path("./Carthage/Checkouts/\(repositoryName)")
+    var targets: [PBXTarget] {
+        return xcodeProj.pbxproj.nativeTargets
     }
-    var targets: Set<String>
 }
