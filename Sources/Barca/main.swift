@@ -3,4 +3,9 @@ import BarcaKit
 
 let projectRoot = URL(fileURLWithPath: "/Users/giginet/work/Swift/BarcaPlayground")
 
-let handler = try! Handler(projectRoot: projectRoot)
+do {
+    let handler = try Handler(projectRoot: projectRoot)
+    try handler.inject()
+} catch {
+    print(error.localizedDescription)
+}

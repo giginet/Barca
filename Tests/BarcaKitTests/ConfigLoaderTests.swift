@@ -17,7 +17,7 @@ RxTest = "dynamic"
 Crossroad = "dynamic"
 """
         do {
-            let config = try loader.loader(from: toml.data(using: .utf8)!)
+            let config = try loader.load(toml.data(using: .utf8)!)
             let repository = config.repositories.RxSwift!
             XCTAssertEqual(repository.RxCocoa, .dynamic)
         } catch {

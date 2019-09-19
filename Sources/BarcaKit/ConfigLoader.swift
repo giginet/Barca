@@ -30,7 +30,7 @@ struct Config: Decodable {
     @dynamicMemberLookup
     struct Repository: Decodable, Hashable {
         var name: String
-        fileprivate var targets: Set<Target>
+        var targets: Set<Target>
         
         subscript(dynamicMember name: String) -> FrameworkType? {
             return targets.first { $0.name == name }?.type
@@ -50,7 +50,12 @@ struct ConfigLoader {
         return decoder
     }()
     
-    func loader(from data: Data) throws -> Config {
+    func load(from url: URL) throws -> Config {
+        let data = try Data(contentsOf: url)
+        return try load(data)
+    }
+    
+    func load(_ data: Data) throws -> Config {
         let innerConfig = try decoder.decode(InnerConfig.self, from: data)
         return Config(innerConfig)
     }
