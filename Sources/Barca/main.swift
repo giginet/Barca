@@ -29,7 +29,7 @@ private let main = Group {
     }
     
     $0.command("clean", description: "Clean up all dirty packages") { (projectRoot: Path) in
-        formatter.printError("Unsupported")
+        formatter.printError("Currently Unsupported")
     }
     
     $0.command("version", description: "Display current version") {

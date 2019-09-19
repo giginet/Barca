@@ -22,7 +22,7 @@ struct Injector {
         }
         let allConfigurations = target.buildConfigurationList?.buildConfigurations ?? []
         for configuration in allConfigurations {
-            configuration.buildSettings["MACH_O_TYPE"] = frameworkType.rawValue
+            configuration.buildSettings["MACH_O_TYPE"] = frameworkType.configurationValue
         }
         let xcodeProj = package.xcodeProj
         do {
@@ -32,5 +32,4 @@ struct Injector {
             return nil
         }
     }
-    
 }
