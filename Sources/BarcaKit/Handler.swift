@@ -28,7 +28,7 @@ public final class Handler {
         }
         let injector = Injector()
         for package in packages {
-            injector.inject(.static, into: "Crossroad", of: package)
+            try injector.inject(.static, into: "Crossroad", of: package)
         }
     }
 }
