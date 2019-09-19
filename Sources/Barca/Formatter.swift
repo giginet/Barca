@@ -15,7 +15,7 @@ private extension FrameworkType {
 struct Formatter {
     func printResult(_ result: [String: InjectionResult]) {
         for (packageName, targets) in result {
-            print("\(packageName, foregroundColor: .black, backgroundColor: .green)")
+            print("\(packageName, foregroundColor: .black, backgroundColor: .green):")
             for (targetName, frameworkType) in targets.compactMapValues({ $0 }) {
                 print("    ✅ Modified \(targetName, foregroundColor: .green) to \(frameworkType.displayName, foregroundColor: .green)")
             }

@@ -7,7 +7,6 @@ final class ConfigLoaderTests: XCTestCase {
 
     func testLoading() {
         let toml = """
-[repository]
 [repository.RxSwift]
 RxCocoa = "dynamic"
 RxSwift = "dynamic"
