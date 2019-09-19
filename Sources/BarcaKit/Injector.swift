@@ -5,7 +5,7 @@ import XcodeProj
 struct Injector {
     enum Error: BarcaError {
         case couldNotFoundTarget(String)
-        
+
         var description: String {
             switch self {
             case .couldNotFoundTarget(let targetName):
@@ -13,9 +13,9 @@ struct Injector {
             }
         }
     }
-    
+
     init() { }
-    
+
     func inject(_ frameworkType: FrameworkType, into targetName: String, of package: Package) throws -> FrameworkType? {
         guard let target = package.targets.first(where: { $0.name == targetName }) else {
             throw Error.couldNotFoundTarget(targetName)

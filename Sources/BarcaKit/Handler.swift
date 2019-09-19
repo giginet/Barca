@@ -12,11 +12,11 @@ public typealias InjectionResult = [String: FrameworkType?]
 public final class Handler {
     private let packages: [Package]
     private let config: Config
-    
+
     enum Error: BarcaError {
         case couldNotFoundConfig(URL)
         case couldNotFoundResolvedCartfile(URL)
-        
+
         var description: String {
             switch self {
             case .couldNotFoundConfig(let url):
@@ -26,19 +26,19 @@ public final class Handler {
             }
         }
     }
-    
+
     public init(projectRoot: URL) throws {
         let barcaConfigPath = Path(projectRoot.appendingPathComponent("Barca.toml").path)
         guard barcaConfigPath.exists else {
             throw Error.couldNotFoundConfig(projectRoot)
         }
         config = try configLoader.load(from: barcaConfigPath.url)
-        
+
         let cartfileResolvedPath = Path(projectRoot.appendingPathComponent("Cartfile.resolved").path)
         guard cartfileResolvedPath.exists else {
             throw Error.couldNotFoundResolvedCartfile(projectRoot)
         }
-        
+
         let cartfile = try parser.parse(cartfileResolvedURL: cartfileResolvedPath.url)
         packages = cartfile.packages.compactMap { package in
             let repositoryPath = Path(projectRoot
@@ -48,7 +48,7 @@ public final class Handler {
             return try? projectLoader.load(package.name, from: repositoryPath)
         }
     }
-    
+
     public func apply() throws -> [String: InjectionResult] {
         return try packages.map { package -> (String, InjectionResult) in
             let result = try inject(for: package)
@@ -59,7 +59,7 @@ public final class Handler {
             dictionary[repositoryName] = injectionResult
         }
     }
-    
+
     func inject(for package: Package) throws -> InjectionResult {
         let repository = config.repositories[dynamicMember: package.repositoryName]
         guard let targets = repository?.targets else {

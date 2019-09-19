@@ -4,17 +4,17 @@ struct Cartfile {
     struct Slug: Hashable {
         var organization: String
         var repository: String
-        
+
         var full: String {
             return "\(organization)/\(repository)"
         }
     }
-    
+
     struct Package: Hashable {
         enum Source: Hashable {
             case git(URL)
             case github(Slug)
-            
+
             func hash(into hasher: inout Hasher) {
                 switch self {
                 case .git(let url):
@@ -35,7 +35,7 @@ struct Cartfile {
             }
         }
     }
-    
+
     var packages: Set<Package>
 }
 
@@ -54,7 +54,7 @@ class CartfileParser {
         case localURL
         case couldNotLoad(URL)
         case couldNotParse(reason: String)
-        
+
         var description: String {
             switch self {
             case .localURL:
@@ -66,9 +66,9 @@ class CartfileParser {
             }
         }
     }
-    
+
     init() { }
-    
+
     func parse(cartfileResolvedURL: URL) throws -> Cartfile {
         guard cartfileResolvedURL.isFileURL else {
             throw Error.localURL
@@ -78,13 +78,13 @@ class CartfileParser {
         }
         return try parse(content: content)
     }
-    
+
     func parse(content: String) throws -> Cartfile {
         let declarations = content.split(separator: "\n").map(String.init)
         let packages = Set(declarations.compactMap { try? parseLine($0) })
         return Cartfile(packages: packages)
     }
-    
+
     private func parseLine(_ declaration: String) throws -> Cartfile.Package {
         let components = declaration.split(separator: " ")
         guard components.count == 3 else {
@@ -93,7 +93,7 @@ class CartfileParser {
         let sourceString = String(components[0])
         let location = String(components[1])
         let version = String(components[2])
-        
+
         let source: Cartfile.Package.Source
         switch sourceString {
         case "git":
@@ -110,7 +110,7 @@ class CartfileParser {
             throw Error.couldNotParse(reason: "Unknown source \(sourceString)")
         }
         let trimmedVersion = version.unquoted()
-        
+
         return Cartfile.Package(source: source, version: trimmedVersion)
     }
 }

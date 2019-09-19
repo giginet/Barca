@@ -4,7 +4,7 @@ import XCTest
 
 final class ConfigLoaderTests: XCTestCase {
     private let loader = ConfigLoader()
-    
+
     func testLoading() {
         let toml = """
 [repository]

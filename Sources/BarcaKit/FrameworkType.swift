@@ -3,7 +3,7 @@ import Foundation
 public enum FrameworkType: String, Decodable {
     case `static`
     case dynamic
-    
+
     var configurationValue: String {
         switch self {
         case .static:

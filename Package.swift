@@ -11,7 +11,7 @@ let package = Package(
             name: "BarcaKit",
             targets: ["BarcaKit"]),
         .executable(name: "barca",
-                    targets: ["Barca"]),
+                    targets: ["Barca"])
     ],
     dependencies: [
         .package(url: "https://github.com/tuist/XcodeProj.git",
@@ -21,7 +21,7 @@ let package = Package(
         .package(url: "https://github.com/dduan/TOMLDecoder.git",
                  .upToNextMinor(from: "0.1.3")),
         .package(url: "https://github.com/jdhealy/PrettyColors.git",
-                 .upToNextMinor(from: "5.0.0")),
+                 .upToNextMinor(from: "5.0.0"))
     ],
     targets: [
         .target(
@@ -32,6 +32,6 @@ let package = Package(
             dependencies: ["BarcaKit", "Commander", "PrettyColors"]),
         .testTarget(
             name: "BarcaKitTests",
-            dependencies: ["BarcaKit"]),
+            dependencies: ["BarcaKit"])
     ]
 )

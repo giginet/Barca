@@ -21,7 +21,7 @@ struct Formatter {
             }
         }
     }
-    
+
     func printError(_ errorDescription: String) {
         print("❗\(errorDescription, foregroundColor: .red)")
     }

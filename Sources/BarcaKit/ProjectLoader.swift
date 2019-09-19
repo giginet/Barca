@@ -6,7 +6,7 @@ final class ProjectLoader {
     enum Error: BarcaError {
         case projectNotFound(Path)
         case couldNotLoadProject(Path)
-        
+
         var description: String {
             switch self {
             case .projectNotFound(let repositoryPath):
@@ -16,7 +16,7 @@ final class ProjectLoader {
             }
         }
     }
-    
+
     func load(_ repositoryName: String, from repositoryPath: Path) throws -> Package {
         guard let projectPath = repositoryPath.glob("*.xcodeproj").first else {
             throw Error.projectNotFound(repositoryPath)
