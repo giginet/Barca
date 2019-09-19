@@ -10,7 +10,7 @@ let package = Package(
         .library(
             name: "BarcaKit",
             targets: ["BarcaKit"]),
-        .executable(name: "Barca",
+        .executable(name: "barca",
                     targets: ["Barca"]),
     ],
     dependencies: [
