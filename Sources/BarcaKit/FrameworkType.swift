@@ -1,6 +1,6 @@
 import Foundation
 
-enum FrameworkType: String, Decodable {
+public enum FrameworkType: String, Decodable {
     case `static`
     case dynamic
     

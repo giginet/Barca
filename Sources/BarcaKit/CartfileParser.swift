@@ -50,12 +50,12 @@ extension Cartfile.Slug {
 }
 
 class CartfileParser {
-    enum Error: Swift.Error {
+    enum Error: BarcaError {
         case localURL
         case couldNotLoad(URL)
         case couldNotParse(reason: String)
         
-        var localizedDescription: String {
+        var description: String {
             switch self {
             case .localURL:
                 return "Passing URL must be local file URL"
