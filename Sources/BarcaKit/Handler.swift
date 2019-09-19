@@ -49,7 +49,7 @@ public final class Handler {
         }
     }
     
-    public func inject() throws -> [String: InjectionResult] {
+    public func apply() throws -> [String: InjectionResult] {
         return try packages.map { package -> (String, InjectionResult) in
             let result = try inject(for: package)
             return (package.repositoryName, result)

@@ -2,7 +2,7 @@ import Foundation
 import BarcaKit
 
 private extension FrameworkType {
-    var prettyString: String {
+    var displayName: String {
         switch self {
         case .dynamic:
             return "Dynamic Framework"
@@ -17,7 +17,7 @@ struct Formatter {
         for (packageName, targets) in result {
             print("\(packageName, foregroundColor: .black, backgroundColor: .green)")
             for (targetName, frameworkType) in targets.compactMapValues({ $0 }) {
-                print("    ✅ Modified \(targetName, foregroundColor: .green) to \(frameworkType.prettyString, foregroundColor: .green)")
+                print("    ✅ Modified \(targetName, foregroundColor: .green) to \(frameworkType.displayName, foregroundColor: .green)")
             }
         }
     }
