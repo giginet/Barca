@@ -11,22 +11,20 @@ final class ConfigLoaderTests: XCTestCase {
     
     func testLoading() {
         let toml = """
-[[repositories]]
-name = "RxSwift"
+[repository]
+[repository.RxSwift]
+RxCocoa = "dynamic"
+RxSwift = "dynamic"
+RxTest = "dynamic"
 
-[[repositories.targets]]
-name = "RxSwift"
-type = "static"
-
-[[repositories.targets]]
-name = "RxCocoa"
-type = "dynamic"
+[repository.Crossroad]
+Crossroad = "dynamic"
 """
         do {
             let config = try loader.loader(from: toml.data(using: .utf8)!)
-            XCTAssertEqual(config.repositories.count, 1)
-            let repository = config.repositories.first!
-            XCTAssertEqual(repository.targets.count, 2)
+            XCTAssertEqual(config.repository.count, 2)
+            let repository = config.repository["RxSwift"]!
+            XCTAssertEqual(repository["RxCocoa"], .dynamic)
         } catch {
             XCTFail(error.localizedDescription)
         }

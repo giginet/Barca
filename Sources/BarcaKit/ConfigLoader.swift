@@ -2,7 +2,7 @@ import Foundation
 import TOMLDecoder
 
 struct Config: Decodable {
-    var repositories: [Repository]
+    var repository: [String: [String: FrameworkType]]
     
     struct Repository: Decodable {
         var name: String
