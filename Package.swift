@@ -20,6 +20,8 @@ let package = Package(
                  .upToNextMinor(from: "0.9.0")),
         .package(url: "https://github.com/dduan/TOMLDecoder.git",
                  .upToNextMinor(from: "0.1.3")),
+        .package(url: "https://github.com/jdhealy/PrettyColors.git",
+                 .upToNextMinor(from: "5.0.0")),
     ],
     targets: [
         .target(
@@ -27,7 +29,7 @@ let package = Package(
             dependencies: ["XcodeProj", "TOMLDecoder"]),
         .target(
             name: "Barca",
-            dependencies: ["BarcaKit", "Commander"]),
+            dependencies: ["BarcaKit", "Commander", "PrettyColors"]),
         .testTarget(
             name: "BarcaKitTests",
             dependencies: ["BarcaKit"]),

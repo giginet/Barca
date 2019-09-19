@@ -7,6 +7,8 @@ private let injector = Injector()
 private let configLoader = ConfigLoader()
 private let parser = CartfileParser()
 
+public typealias InjectionResult = [String: FrameworkType?]
+
 public final class Handler {
     private let packages: [Package]
     private let config: Config
@@ -47,7 +49,6 @@ public final class Handler {
         }
     }
     
-    public typealias InjectionResult = [String: FrameworkType?]
     public func inject() throws -> [String: InjectionResult] {
         return try packages.map { package -> (String, InjectionResult) in
             let result = try inject(for: package)

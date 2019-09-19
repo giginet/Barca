@@ -21,6 +21,9 @@ struct Config: Decodable {
     @dynamicMemberLookup
     struct RepositoryContainer: Decodable {
         fileprivate var repositories: Set<Repository>
+        var count: Int {
+            return repositories.count
+        }
         
         subscript(dynamicMember name: String) -> Repository? {
             return repositories.first { $0.name == name }
