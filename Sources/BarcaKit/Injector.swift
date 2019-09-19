@@ -3,20 +3,6 @@ import PathKit
 import XcodeProj
 
 struct Injector {
-    enum FrameworkType: String {
-        case `static`
-        case dynamic
-        
-        var configurationValue: String {
-            switch self {
-            case .static:
-                return "staticlib"
-            case .dynamic:
-                return "mh_dylib"
-            }
-        }
-    }
-    
     enum Error: Swift.Error {
         case couldNotFoundTarget(String)
     }
