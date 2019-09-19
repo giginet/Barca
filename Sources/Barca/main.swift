@@ -31,10 +31,6 @@ private let main = Group {
     $0.command("clean", description: "Clean up all dirty packages") { (_: Path) in
         formatter.printError("Currently Unsupported")
     }
-
-    $0.command("version", description: "Display current version") {
-        print(BarcaKit.version)
-    }
 }
 
-main.run()
+main.run(BarcaKit.version)
