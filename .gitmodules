@@ -1,0 +1,6 @@
+[submodule "Fixtures/RegularProject/Carthage/Checkouts/Crossroad"]
+	path = Fixtures/RegularProject/Carthage/Checkouts/Crossroad
+	url = https://github.com/giginet/Crossroad.git
+[submodule "Fixtures/RegularProject/Carthage/Checkouts/RxSwift"]
+	path = Fixtures/RegularProject/Carthage/Checkouts/RxSwift
+	url = https://github.com/ReactiveX/RxSwift.git

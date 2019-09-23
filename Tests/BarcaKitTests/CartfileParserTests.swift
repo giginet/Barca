@@ -4,7 +4,7 @@ import XCTest
 
 class CartfileParserTests: XCTestCase {
     let parser = CartfileParser()
-
+    
     func testParsingCartfiles() {
         let content = """
 github "giginet/Crossroad" "3.0.0"
