@@ -1,5 +1,6 @@
 excluded:
   - .build
+  - Fixtures/*
 disabled_rules:
   - line_length
   - nesting

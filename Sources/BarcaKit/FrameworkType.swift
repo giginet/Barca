@@ -4,7 +4,7 @@ import struct XcodeProj.BuildSettings
 public enum FrameworkType: String, Decodable {
     case `static`
     case dynamic
-    
+
     fileprivate init?(configurationValue: String) {
         switch configurationValue {
         case "staticlib":
