@@ -61,7 +61,7 @@ public final class Handler {
     }
 
     func inject(for package: Package) throws -> InjectionResult {
-        let repository = config.repositories[dynamicMember: package.repositoryName]
+        let repository = config.packages[dynamicMember: package.repositoryName]
         guard let targets = repository?.targets else {
             return [:]
         }

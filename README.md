@@ -33,14 +33,14 @@ Some packages contains multiple modules. (e.g. RxSwift)
 You can treat them like followings.
 
 ```toml
-[RxSwift]
+[packages.RxSwift]
 RxCocoa = "static"
 RxSwift = "static"
 RxRelay = "static"
 RxTest = "dynamic"
 RxBlocking = "dynamic"
 
-[Crossroad]
+[packages.Crossroad]
 Crossroad = "static"
 ```
 

@@ -1,5 +1,5 @@
 import XCTest
-@testable import Barca
+@testable import BarcaKit
 
 final class BarcaTests: XCTestCase {
     func testExample() {

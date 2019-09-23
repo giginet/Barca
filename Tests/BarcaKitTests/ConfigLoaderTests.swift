@@ -7,17 +7,17 @@ final class ConfigLoaderTests: XCTestCase {
 
     func testLoading() {
         let toml = """
-[repository.RxSwift]
+[packages.RxSwift]
 RxCocoa = "dynamic"
 RxSwift = "dynamic"
 RxTest = "dynamic"
 
-[repository.Crossroad]
+[packages.Crossroad]
 Crossroad = "dynamic"
 """
         do {
             let config = try loader.load(toml.data(using: .utf8)!)
-            let repository = config.repositories.RxSwift!
+            let repository = config.packages.RxSwift!
             XCTAssertEqual(repository.RxCocoa, .dynamic)
         } catch {
             XCTFail(error.localizedDescription)
