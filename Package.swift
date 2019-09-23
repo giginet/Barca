@@ -21,17 +21,21 @@ let package = Package(
         .package(url: "https://github.com/dduan/TOMLDecoder.git",
                  .upToNextMinor(from: "0.1.3")),
         .package(url: "https://github.com/jdhealy/PrettyColors.git",
-                 .upToNextMinor(from: "5.0.0"))
+                 .upToNextMinor(from: "5.0.0")),
+        .package(url: "https://github.com/tuist/shell.git",
+                 from: "2.0.0"),
+        .package(url: "https://github.com/kylef/PathKit.git",
+                 from: "1.0.0"),
     ],
     targets: [
         .target(
             name: "BarcaKit",
-            dependencies: ["XcodeProj", "TOMLDecoder"]),
+            dependencies: ["XcodeProj", "TOMLDecoder", "Shell", "PathKit"]),
         .target(
             name: "Barca",
             dependencies: ["BarcaKit", "Commander", "PrettyColors"]),
         .testTarget(
             name: "BarcaKitTests",
-            dependencies: ["BarcaKit"])
+            dependencies: ["BarcaKit", "ShellTesting"])
     ]
 )

@@ -16,7 +16,6 @@ final class InjectorTests: XCTestCase {
         }
         let allConfiguration = target.buildConfigurationList!.buildConfigurations
         for configuration in allConfiguration {
-            print(configuration.buildSettings)
             XCTAssertEqual(configuration.buildSettings.frameworkType,
                            frameworkType,
                            line: line)
