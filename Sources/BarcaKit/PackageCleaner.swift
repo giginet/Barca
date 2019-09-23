@@ -42,6 +42,7 @@ struct PackageCleaner {
         }
     }
     
+    @discardableResult
     func clean(_ repositoryPath: Path) throws -> Bool {
         guard try shouldClean(repositoryPath) else {
             return false
