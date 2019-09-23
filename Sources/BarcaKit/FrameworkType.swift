@@ -29,7 +29,7 @@ public enum FrameworkType: String, Decodable {
 extension BuildSettings {
     public var frameworkType: FrameworkType? {
         guard let machOType = self["MACH_O_TYPE"] as? String else {
-            return .static
+            return .dynamic
         }
         return FrameworkType(configurationValue: machOType)
     }

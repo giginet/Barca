@@ -36,16 +36,71 @@ final class InjectorTests: XCTestCase {
         
         let package = Package(repositoryPath: Path(singlePackage.path),
                               xcodeProj: xcodeproj)
-        assertFrameworkType("Crossroad", of: package, shouldBe: .static, line: #line)
+        assertFrameworkType("Crossroad", of: package, shouldBe: .dynamic, line: #line)
         
         do {
-            let result = try injector.inject(.dynamic, into: "Crossroad", of: package)
-            XCTAssertEqual(result, .dynamic)
-            for (target, type, line) in expected {
-                assertFrameworkType(target, of: package, shouldBe: type, line: line)
+            for (targetName, type, line) in expected {
+                let result = try injector.inject(type, into: targetName, of: package)
+                XCTAssertEqual(result, type, line: line)
+                assertFrameworkType(targetName, of: package, shouldBe: type, line: line)
             }
         } catch {
             XCTFail("Could not write project \(error.localizedDescription)")
+        }
+    }
+    
+    func testInjectWithMultipleTargets() {
+        let expected: [(String, FrameworkType, UInt)] = [
+            ("RxSwift", .dynamic, #line),
+            ("RxCocoa", .dynamic, #line),
+            ("RxTest", .static, #line),
+            ("RxBlocking", .static, #line),
+            ("RxRelay", .dynamic, #line),
+        ]
+        let projectBase = buildFixtureURL(from: "RegularProject")
+        let singlePackage = projectBase.appendingPathComponent("Carthage")
+            .appendingPathComponent("Checkouts")
+            .appendingPathComponent("RxSwift")
+        let xcodeprojURL = singlePackage.appendingPathComponent("Rx.xcodeproj")
+        let xcodeproj = try! XcodeProj(pathString: xcodeprojURL.path)
+        
+        let package = Package(repositoryPath: Path(singlePackage.path),
+                              xcodeProj: xcodeproj)
+        expected.forEach { (targetName, _, line) in
+            assertFrameworkType(targetName, of: package, shouldBe: .dynamic, line: line)
+        }
+        
+        do {
+            for (targetName, type, line) in expected {
+                let result = try injector.inject(type, into: targetName, of: package)
+                XCTAssertEqual(result, type, line: line)
+                assertFrameworkType(targetName, of: package, shouldBe: type, line: line)
+            }
+        } catch {
+            XCTFail("Could not write project \(error.localizedDescription)")
+        }
+    }
+    
+    func testInjectWithUnknownTarget() {
+        let expected: [(String, FrameworkType, UInt)] = [
+            ("RxUnknown", .dynamic, #line),
+        ]
+        let projectBase = buildFixtureURL(from: "RegularProject")
+        let singlePackage = projectBase.appendingPathComponent("Carthage")
+            .appendingPathComponent("Checkouts")
+            .appendingPathComponent("RxSwift")
+        let xcodeprojURL = singlePackage.appendingPathComponent("Rx.xcodeproj")
+        let xcodeproj = try! XcodeProj(pathString: xcodeprojURL.path)
+        
+        let package = Package(repositoryPath: Path(singlePackage.path),
+                              xcodeProj: xcodeproj)
+        do {
+            for (targetName, type, _) in expected {
+                let _ = try injector.inject(type, into: targetName, of: package)
+                XCTFail("Injecting to unknown target should fail")
+            }
+        } catch {
+            XCTAssertEqual((error as? BarcaError)?.description, #"Target "RxUnknown" is not found in this project."#)
         }
     }
 }
