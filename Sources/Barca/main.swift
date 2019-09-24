@@ -12,9 +12,19 @@ extension Path: ArgumentConvertible {
 
 private let formatter = Formatter()
 
+private func parseProjectRoot(from parser: ArgumentParser) -> Path {
+    do {
+        let projectRootString = try parser.shiftValue(for: "project-root", or: "p") ?? "."
+        return Path(projectRootString)
+    } catch {
+        return Path(".")
+    }
+}
+
 private let main = Group {
-    $0.command("apply", description: "Apply framework types to all packages") { (projectRoot: Path) in
+    $0.command("apply", description: "Apply framework types to all packages") { (parser: ArgumentParser) in
         do {
+            let projectRoot = parseProjectRoot(from: parser)
             let handler = try Handler(projectRoot: projectRoot.url)
             let result = try handler.apply()
             formatter.printResult(result)
@@ -28,8 +38,16 @@ private let main = Group {
         }
     }
 
-    $0.command("clean", description: "Clean up all dirty packages") { (_: Path) in
-        formatter.printError("Currently Unsupported")
+    $0.command("clean", description: "Clean up all dirty packages") { (packageName: String?, parser: ArgumentParser) in
+        do {
+            let projectRoot = parseProjectRoot(from: parser)
+            let handler = try Handler(projectRoot: projectRoot.url)
+            if let name = packageName {
+                try handler.clean(.package(name))
+            } else {
+                try handler.clean(.all)
+            }
+        }
     }
 }
 

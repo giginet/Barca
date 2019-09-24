@@ -1,11 +1,14 @@
 import Foundation
 import PathKit
 import XcodeProj
+import Shell
 
 private let projectLoader: ProjectLoader = .init()
 private let injector = Injector()
 private let configLoader = ConfigLoader()
 private let parser = CartfileParser()
+
+private let defaultGitURL = URL(fileURLWithPath: "/usr/bin/git")
 
 public typealias InjectionResult = [String: FrameworkType?]
 
@@ -16,6 +19,7 @@ public final class Handler {
     enum Error: BarcaError {
         case couldNotFoundConfig(URL)
         case couldNotFoundResolvedCartfile(URL)
+        case couldNotFoundPackage(String)
 
         var description: String {
             switch self {
@@ -23,6 +27,8 @@ public final class Handler {
                 return "Barca.toml is not found on \(url.path)"
             case .couldNotFoundResolvedCartfile(let url):
                 return "Cartfile.resolved is not found on \(url.path)"
+            case .couldNotFoundPackage(let package):
+                return "Package \(package) is not found in this project"
             }
         }
     }
@@ -72,6 +78,27 @@ public final class Handler {
         .reduce(into: [:]) { (dictionary, result) in
             let (targetName, frameworkType) = result
             dictionary[targetName] = frameworkType
+        }
+    }
+
+    public enum CleanTarget {
+        case all
+        case package(String)
+    }
+
+    public func clean(_ target: CleanTarget) throws {
+        let cleaner = PackageCleaner(shell: Shell(),
+                                     gitURL: config.gitURL ?? defaultGitURL)
+        switch target {
+        case .all:
+            for package in packages {
+                try cleaner.clean(package.repositoryPath)
+            }
+        case .package(let repositoryName):
+            guard let package = packages.first(where: { $0.repositoryName ==  repositoryName}) else {
+                throw Error.couldNotFoundPackage(repositoryName)
+            }
+            try cleaner.clean(package.repositoryPath)
         }
     }
 }

@@ -2,11 +2,13 @@ import Foundation
 import TOMLDecoder
 
 private struct InnerConfig: Decodable {
+    var gitURL: String?
     var packages: [String: [String: FrameworkType]]
 }
 
 struct Config: Decodable {
     private(set) var packages: PackageContainer
+    var gitURL: URL?
 
     fileprivate init(_ innerConfig: InnerConfig) {
         let packages = Set(innerConfig.packages.map { (repositoryName, targetMap) -> Repository in
@@ -16,6 +18,7 @@ struct Config: Decodable {
             return Repository(name: repositoryName, targets: targets)
         })
         self.packages = PackageContainer(packages: packages)
+        gitURL = innerConfig.gitURL.flatMap(URL.init(fileURLWithPath:))
     }
 
     @dynamicMemberLookup
