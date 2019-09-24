@@ -24,7 +24,7 @@ public enum FrameworkType: String, Decodable {
             return "mh_dylib"
         }
     }
-    
+
     var displayName: String {
         switch self {
         case .dynamic:

@@ -4,7 +4,7 @@ import XCTest
 
 final class ConfigLoaderTests: XCTestCase {
     private let loader = ConfigLoader()
-    
+
     func testLoading() {
         let toml = """
 [packages.RxSwift]
@@ -23,7 +23,7 @@ Crossroad = "dynamic"
             XCTFail(error.localizedDescription)
         }
     }
-    
+
     func testGitPath() {
         let toml = """
 git_path = "/path/to/git/executable"

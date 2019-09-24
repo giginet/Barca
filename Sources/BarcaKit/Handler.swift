@@ -57,7 +57,7 @@ public final class Handler {
             return try? projectLoader.load(package.name, from: repositoryPath)
         }
     }
-    
+
     public func apply() throws {
         let result: [String: InjectionResult] = try packages.map { package -> (String, InjectionResult) in
             let result = try inject(for: package)
