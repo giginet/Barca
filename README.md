@@ -48,7 +48,7 @@ Crossroad = "static"
 
 ```console
 $ carthage bootstrap --no-build
-$ barca apply /path/to/your/project/directory
+$ barca apply --project-root /path/to/your/project/directory
 RxSwift:
     ✅ Modified RxSwift to Static Framework
     ✅ Modified RxCocoa to Static Framework
@@ -60,3 +60,12 @@ Crossroad:
 $ carthage build
 ```
 
+### Settings
+
+```toml
+git_path = "/path/to/git/executable"
+
+[packages.SomePackage]
+Target1 = "dynamic"
+Target2 = "static"
+```
