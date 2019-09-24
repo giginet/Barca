@@ -2,9 +2,11 @@
 
 [![Build Status](https://img.shields.io/travis/giginet/Barca.svg?branch=master&style=flat-square)](https://travis-ci.org/giginet/Barca)
 [![Release](https://img.shields.io/github/release/giginet/Barca.svg?style=flat-square)](https://github.com/giginet/Barca/releases)
+[![SwiftPM compatible](https://img.shields.io/badge/SwiftPM-compatible-4BC51D.svg?style=flat-square)](https://github.com/apple/swift-package-manager) 
 [![Language](https://img.shields.io/static/v1.svg?label=language&message=Swift%205.1&color=FA7343&logo=swift&style=flat-square)](https://swift.org)
+[![Xcode](https://img.shields.io/static/v1.svg?label=tool&style=flat-square&color=1575F9&message=Xcode%2011.1)](https://developer.apple.com/download)
 [![Platform](https://img.shields.io/static/v1.svg?label=platform&message=macOS&color=grey&logo=apple&style=flat-square)](http://cocoapods.org/pods/Barca)
-[![License](https://img.shields.io/cocoapods/l/Barca.svg?style=flat-square)](https://github.com/giginet/Barca/blob/master/LICENSE)
+[![License](https://img.shields.io/github/license/giginet/Barca.svg?style=flat-square&color=black)](https://github.com/giginet/Barca/blob/master/LICENSE)
 
 :zap: Barca hastens Carthage packages like lightning.
 
