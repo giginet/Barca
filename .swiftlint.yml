@@ -5,3 +5,7 @@ disabled_rules:
   - trailing_comma
   - line_length
   - nesting
+  - vertical_parameter_alignment
+identifier_name:
+  excluded:
+    - m # Commandant
