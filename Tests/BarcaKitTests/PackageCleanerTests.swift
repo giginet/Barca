@@ -13,17 +13,13 @@ final class PackageCleanerTests: XCTestCase {
         return PackageCleaner(shell: mock,
                               gitURL: URL(fileURLWithPath: "/usr/bin/git"))
     }()
-    lazy var realCleaner: PackageCleaner = {
-        return PackageCleaner(shell: Shell(),
-                              gitURL: URL(fileURLWithPath: "/usr/bin/git"))
-    }()
     var repositoryPath: Path {
         return Path(buildFixtureURL(from: "RegularProject")
             .appendingPathComponent("Carthage")
             .appendingPathComponent("Checkouts")
             .appendingPathComponent("RxSwift").path)
     }
-    
+
     private func stub(clean: Bool) {
         mock.stub(["/usr/bin/git", "diff", "--quiet"],
                   shouldBeTerminatedOnParentExit: true,
@@ -33,48 +29,56 @@ final class PackageCleanerTests: XCTestCase {
                   stder: [],
                   code: clean ? 0 : 1)
     }
-    
-    private func dirty(repository: Path) {
-        let shell = Shell()
-        _ = shell.sync(["echo \"// Dirty\" >> \((repository + "Package.swift").string)"])
-    }
-    
-    override func setUp() {
-        super.setUp()
-        
-        try? realCleaner.clean(repositoryPath)
-    }
-    
+
     func testShouldClean() {
         stub(clean: false)
         let result = try! cleaner.shouldClean(repositoryPath)
         XCTAssertTrue(result)
     }
-    
+
     func testShouldNotClean() {
         stub(clean: true)
         let result = try! cleaner.shouldClean(repositoryPath)
         XCTAssertFalse(result)
     }
-    
-    func testShouldCleanWithRealGit() {
-        dirty(repository: repositoryPath)
-        let result = try! realCleaner.shouldClean(repositoryPath)
-//        XCTAssertTrue(result)
+
+    func testCleanForDirtyDirectory() {
+        stub(clean: false)
+        mock.stub(["/usr/bin/git", "reset", "--hard", "HEAD"],
+                  shouldBeTerminatedOnParentExit: true,
+                  workingDirectoryPath: repositoryPath,
+                  env: nil,
+                  stdout: [],
+                  stder: [],
+                  code: 0)
+        let result = try! cleaner.clean(repositoryPath)
+        XCTAssertTrue(result)
     }
-    
-    func testShouldNotCleanWithRealGit() {
-        let result = try! realCleaner.shouldClean(repositoryPath)
+
+    func testCleanForCleanedDirctory() {
+        stub(clean: true)
+        mock.stub(["/usr/bin/git", "reset", "--hard", "HEAD"],
+                  shouldBeTerminatedOnParentExit: true,
+                  workingDirectoryPath: repositoryPath,
+                  env: nil,
+                  stdout: [],
+                  stder: [],
+                  code: 0)
+        let result = try! cleaner.clean(repositoryPath)
         XCTAssertFalse(result)
     }
-    
-    func testClean() {
-        
-    }
-    
-    override func tearDown() {
-        super.tearDown()
-        
-//        try? realCleaner.clean(repositoryPath)
+
+    func testCleanWithInvalidGitPath() {
+        let gitURL = URL(fileURLWithPath: "/path/to/invalid/git/path/git")
+        let cleaner = PackageCleaner(shell: mock,
+                                     gitURL: gitURL)
+        XCTAssertThrowsError(try cleaner.clean(repositoryPath)) { error in
+            switch error {
+            case PackageCleaner.Error.gitExecutableNotFound(let url):
+                XCTAssertEqual(url, gitURL)
+            default:
+                XCTFail("error should be gitExecutableNotFound")
+            }
+        }
     }
 }

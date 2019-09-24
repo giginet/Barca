@@ -2,5 +2,6 @@ excluded:
   - .build
   - Fixtures/*
 disabled_rules:
+  - trailing_comma
   - line_length
   - nesting
