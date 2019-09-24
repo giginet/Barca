@@ -21,11 +21,11 @@ final class PackageCleanerTests: XCTestCase {
     }
 
     private func stub(clean: Bool) {
-        mock.stub(["/usr/bin/git", "diff", "--quiet"],
+        mock.stub(["/usr/bin/git", "status", "--porcelain"],
                   shouldBeTerminatedOnParentExit: true,
                   workingDirectoryPath: repositoryPath,
                   env: nil,
-                  stdout: [],
+                  stdout: clean ? [] : ["dirty"],
                   stder: [],
                   code: clean ? 0 : 1)
     }
@@ -44,7 +44,7 @@ final class PackageCleanerTests: XCTestCase {
 
     func testCleanForDirtyDirectory() {
         stub(clean: false)
-        mock.stub(["/usr/bin/git", "reset", "--hard", "HEAD"],
+        mock.stub(["/usr/bin/git", "clean", "-fd"],
                   shouldBeTerminatedOnParentExit: true,
                   workingDirectoryPath: repositoryPath,
                   env: nil,
@@ -57,7 +57,7 @@ final class PackageCleanerTests: XCTestCase {
 
     func testCleanForCleanedDirctory() {
         stub(clean: true)
-        mock.stub(["/usr/bin/git", "reset", "--hard", "HEAD"],
+        mock.stub(["/usr/bin/git", "clean", "-fd"],
                   shouldBeTerminatedOnParentExit: true,
                   workingDirectoryPath: repositoryPath,
                   env: nil,

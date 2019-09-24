@@ -5,12 +5,12 @@ import Shell
 struct PackageCleaner {
     var shell: Shell
     var gitURL: URL
-
+    
     enum Error: Swift.Error {
         case repositoryNotFound(URL)
         case gitExecutableNotFound(URL)
     }
-
+    
     private func executeGit(at repositoryPath: Path, arguments: String...) throws -> Result<String, ShellError> {
         guard Path(gitURL.path).exists else {
             throw Error.gitExecutableNotFound(gitURL)
@@ -30,36 +30,28 @@ struct PackageCleaner {
         }
         return result
     }
-
+    
     func shouldClean(_ repositoryPath: Path) throws -> Bool {
-        var result: Bool = false
-        try repositoryPath.chdir {
-            let executionResult = try executeGit(at: repositoryPath, arguments: "diff", "--quiet")
-            switch executionResult {
-            case .success:
-                result = false
-            case .failure:
-                result = true
-            }
+        let result = try executeGit(at: repositoryPath, arguments: "status", "--porcelain")
+        switch result {
+        case .success(let string) where string.isEmpty:
+            return false
+        default:
+            return true
         }
-        return result
     }
-
+    
     @discardableResult
     func clean(_ repositoryPath: Path) throws -> Bool {
         guard try shouldClean(repositoryPath) else {
             return false
         }
-        var result: Bool = false
-        try repositoryPath.chdir {
-            let executionResult = try self.executeGit(at: repositoryPath, arguments: "reset", "--hard", "HEAD")
-            switch executionResult {
-            case .success:
-                result = true
-            case .failure:
-                result = false
-            }
+        let result = try executeGit(at: repositoryPath, arguments: "clean", "-fd")
+        switch result {
+        case .success:
+            return true
+        case .failure:
+            return false
         }
-        return result
     }
 }
