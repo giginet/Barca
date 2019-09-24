@@ -23,7 +23,7 @@ struct CleanOptions: OptionsProtocol {
     static func evaluate(_ m: CommandMode) -> Result<CleanOptions, CommandantError<FrontendError>> {
         return create
             <*> m <| Option<Path>(key: "project-root", defaultValue: Path(""), usage: "Project root path")
-            <*> m <| Argument(defaultValue: nil, usage: "Package name to clean up")
+            <*> m <| Option<String?>(key: "package-name", defaultValue: nil, usage: "Package name to clean up")
     }
 }
 
