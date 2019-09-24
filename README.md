@@ -1,5 +1,11 @@
 # Barca
 
+[![Build Status](https://img.shields.io/travis/giginet/Barca.svg?branch=master&style=flat-square)](https://travis-ci.org/giginet/Barca)
+[![Release](https://img.shields.io/github/release/giginet/Barca.svg?style=flat-square)](https://github.com/giginet/Barca/releases)
+[![Language](https://img.shields.io/static/v1.svg?label=language&message=Swift%205.1&color=FA7343&logo=swift&style=flat-square)](https://swift.org)
+[![Platform](https://img.shields.io/static/v1.svg?label=platform&message=macOS&color=grey&logo=apple&style=flat-square)](http://cocoapods.org/pods/Barca)
+[![License](https://img.shields.io/cocoapods/l/Barca.svg?style=flat-square)](https://github.com/giginet/Barca/blob/master/LICENSE)
+
 :zap: Barca hastens Carthage packages like lightning.
 
 ## Overview
