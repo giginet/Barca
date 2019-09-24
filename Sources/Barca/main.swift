@@ -5,6 +5,7 @@ import PathKit
 
 let registry = CommandRegistry<FrontendError>()
 registry.register(ApplyCommand())
+registry.register(CleanCommand())
 
 let helpCommand = HelpCommand(registry: registry)
 registry.register(helpCommand)

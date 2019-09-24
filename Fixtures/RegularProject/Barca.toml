@@ -1,0 +1,6 @@
+[packages.RxSwift]
+RxSwift = "static"
+RxCocoa = "static"
+
+[packages.Crossroad]
+Crossroad = "static"

@@ -15,13 +15,13 @@ struct PackageCleaner {
         guard Path(gitURL.path).exists else {
             throw Error.gitExecutableNotFound(gitURL)
         }
-        let result =  shell.capture([gitURL.path] + arguments,
-                                    workingDirectoryPath: repositoryPath,
-                                    env: nil)
+        let result = shell.capture([gitURL.path] + arguments,
+                                   workingDirectoryPath: repositoryPath,
+                                   env: nil)
         if case .failure(let error) = result {
             switch error.processError {
             case .shell(_, let code) where code == 127:
-            throw Error.repositoryNotFound(repositoryPath.url)
+                throw Error.repositoryNotFound(repositoryPath.url)
             case .missingExecutable:
                 throw Error.gitExecutableNotFound(gitURL)
             default:
@@ -32,14 +32,17 @@ struct PackageCleaner {
     }
 
     func shouldClean(_ repositoryPath: Path) throws -> Bool {
-        let result = try executeGit(at: repositoryPath, arguments: "diff", "--quiet")
-        switch result {
-        case .success:
-            return false
-        case .failure(let error):
-            print(error)
-            return true
+        var result: Bool = false
+        try repositoryPath.chdir {
+            let executionResult = try executeGit(at: repositoryPath, arguments: "diff", "--quiet")
+            switch executionResult {
+            case .success:
+                result = false
+            case .failure:
+                result = true
+            }
         }
+        return result
     }
 
     @discardableResult
@@ -47,12 +50,16 @@ struct PackageCleaner {
         guard try shouldClean(repositoryPath) else {
             return false
         }
-        let result = try executeGit(at: repositoryPath, arguments: "reset", "--hard", "HEAD")
-        switch result {
-        case .success:
-            return true
-        case .failure:
-            return false
+        var result: Bool = false
+        try repositoryPath.chdir {
+            let executionResult = try self.executeGit(at: repositoryPath, arguments: "reset", "--hard", "HEAD")
+            switch executionResult {
+            case .success:
+                result = true
+            case .failure:
+                result = false
+            }
         }
+        return result
     }
 }
