@@ -24,6 +24,15 @@ public enum FrameworkType: String, Decodable {
             return "mh_dylib"
         }
     }
+    
+    var displayName: String {
+        switch self {
+        case .dynamic:
+            return "Dynamic Framework"
+        case .static:
+            return "Static Framework"
+        }
+    }
 }
 
 extension BuildSettings {

@@ -2,6 +2,7 @@ import Foundation
 import PathKit
 import XcodeProj
 import Shell
+import PrettyColors
 
 private let projectLoader: ProjectLoader = .init()
 private let injector = Injector()
@@ -56,15 +57,21 @@ public final class Handler {
             return try? projectLoader.load(package.name, from: repositoryPath)
         }
     }
-
-    public func apply() throws -> [String: InjectionResult] {
-        return try packages.map { package -> (String, InjectionResult) in
+    
+    public func apply() throws {
+        let result: [String: InjectionResult] = try packages.map { package -> (String, InjectionResult) in
             let result = try inject(for: package)
             return (package.repositoryName, result)
         }
         .reduce(into: [:]) { (dictionary, result) in
             let (repositoryName, injectionResult) = result
             dictionary[repositoryName] = injectionResult
+        }
+        for (packageName, targets) in result {
+            output.print("📦\(packageName, foregroundColor: .green):")
+            for (targetName, frameworkType) in targets.compactMapValues({ $0 }) {
+                output.print("    ⚡Modified \(targetName, foregroundColor: .green) to \(frameworkType.displayName, foregroundColor: .green)")
+            }
         }
     }
 
@@ -94,8 +101,19 @@ public final class Handler {
         switch target {
         case .all:
             for package in packages {
-                output.print("Cleaning package \(package.repositoryName)")
-                try cleaner.clean(package.repositoryPath)
+                do {
+                    let result = try cleaner.clean(package.repositoryPath)
+                    if result {
+                        let message = "✨Package \(package.repositoryName) is cleaned"
+                        output.print("\(message, foregroundColor: .green)")
+                    } else {
+                        let message = "✅Package \(package.repositoryName) is already cleaned"
+                        output.print("\(message, foregroundColor: .yellow)")
+                    }
+                } catch {
+                    let message = "Unable to clean \(package.repositoryName)"
+                    output.print("\(message, foregroundColor: .red)")
+                }
             }
         case .package(let repositoryName):
             guard let package = packages.first(where: { $0.repositoryName ==  repositoryName}) else {

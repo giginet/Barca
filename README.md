@@ -5,6 +5,7 @@
 ## Overview
 
 Barca enables to build Carthage packages as Static Frameworks.
+
 Barca injects build settings to each packages before building.
 
 ## Installation
@@ -29,6 +30,7 @@ github "giginet/Crossroad" ~> 3.0.0
 Place `Barca.toml` on your project root.
 You have to specify Framework types for each packages.
 
+
 Some packages contains multiple modules. (e.g. RxSwift)
 You can treat them like followings.
 
@@ -50,13 +52,13 @@ Crossroad = "static"
 $ carthage bootstrap --no-build
 $ barca apply --project-root /path/to/your/project/directory
 RxSwift:
-    ✅ Modified RxSwift to Static Framework
-    ✅ Modified RxCocoa to Static Framework
-    ✅ Modified RxRelay to Static Framework
-    ✅ Modified RxTest to Dynamic Framework
-    ✅ Modified RxBlocking to Dynamic Framework
+    ⚡Modified RxSwift to Static Framework
+    ⚡Modified RxCocoa to Static Framework
+    ⚡Modified RxRelay to Static Framework
+    ⚡Modified RxTest to Dynamic Framework
+    ⚡Modified RxBlocking to Dynamic Framework
 Crossroad:
-    ✅ Modified Crossroad to Static Framework
+    ⚡Modified Crossroad to Static Framework
 $ carthage build
 ```
 
