@@ -25,4 +25,13 @@ struct Formatter {
     func printError(_ errorDescription: String) {
         print("❗\(errorDescription, foregroundColor: .red)")
     }
+
+    func printError(_ error: Error) {
+        switch error {
+        case let barcaError as BarcaError:
+            printError(barcaError.description)
+        default:
+            printError(error.localizedDescription)
+        }
+    }
 }

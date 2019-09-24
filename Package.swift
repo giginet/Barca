@@ -16,8 +16,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/tuist/XcodeProj.git",
                  .upToNextMinor(from: "7.0.0")),
-        .package(url: "https://github.com/kylef/Commander.git",
-                 .upToNextMinor(from: "0.9.0")),
+        .package(url: "https://github.com/Carthage/Commandant",
+                 .upToNextMinor(from: "0.17.0")),
         .package(url: "https://github.com/dduan/TOMLDecoder.git",
                  .upToNextMinor(from: "0.1.3")),
         .package(url: "https://github.com/jdhealy/PrettyColors.git",
@@ -33,7 +33,7 @@ let package = Package(
             dependencies: ["XcodeProj", "TOMLDecoder", "Shell", "PathKit"]),
         .target(
             name: "Barca",
-            dependencies: ["BarcaKit", "Commander", "PrettyColors"]),
+            dependencies: ["BarcaKit", "Commandant", "PrettyColors"]),
         .testTarget(
             name: "BarcaKitTests",
             dependencies: ["BarcaKit", "ShellTesting"])
