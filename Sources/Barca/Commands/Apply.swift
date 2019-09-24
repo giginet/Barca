@@ -24,7 +24,7 @@ struct ApplyCommand: CommandProtocol {
 
     func run(_ options: ApplyOptions) -> Result<(), FrontendError> {
         do {
-            let handler = try Handler(projectRoot: options.projectRoot.url)
+            let handler = try Handler(projectRoot: options.projectRoot.url, output: StandardOutput())
             let result = try handler.apply()
             formatter.printResult(result)
             return .success(())

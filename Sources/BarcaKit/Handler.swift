@@ -15,6 +15,7 @@ public typealias InjectionResult = [String: FrameworkType?]
 public final class Handler {
     private let packages: [Package]
     private let config: Config
+    private let output: Output
 
     enum Error: BarcaError {
         case couldNotFoundConfig(URL)
@@ -33,7 +34,8 @@ public final class Handler {
         }
     }
 
-    public init(projectRoot: URL) throws {
+    public init(projectRoot: URL, output: Output) throws {
+        self.output = output
         let barcaConfigPath = Path(projectRoot.appendingPathComponent("Barca.toml").path)
         guard barcaConfigPath.exists else {
             throw Error.couldNotFoundConfig(projectRoot)
@@ -92,6 +94,7 @@ public final class Handler {
         switch target {
         case .all:
             for package in packages {
+                output.print("Cleaning package \(package.repositoryName)")
                 try cleaner.clean(package.repositoryPath)
             }
         case .package(let repositoryName):

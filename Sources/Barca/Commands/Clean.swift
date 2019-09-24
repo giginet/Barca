@@ -34,7 +34,7 @@ struct CleanCommand: CommandProtocol {
 
     func run(_ options: CleanOptions) -> Result<(), FrontendError> {
         do {
-            let handler = try Handler(projectRoot: options.projectRoot.url)
+            let handler = try Handler(projectRoot: options.projectRoot.url, output: StandardOutput())
             try handler.clean(options.cleanTarget)
             return .success(())
         } catch {

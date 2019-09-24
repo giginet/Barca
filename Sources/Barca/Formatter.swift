@@ -35,3 +35,9 @@ struct Formatter {
         }
     }
 }
+
+struct StandardOutput: Output {
+    func print(_ message: String) {
+        Swift.print(message)
+    }
+}
